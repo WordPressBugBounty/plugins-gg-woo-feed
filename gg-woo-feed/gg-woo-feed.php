@@ -3,14 +3,14 @@
  * Plugin Name:       GTG Product Feed for Shopping
  * Plugin URI:        https://wpopal.com/gg-woo-feed
  * Description:       GG Woo Feed helps you make feeds with WooCommerce to connect to popular providers: Google, Meta, Printerst.
- * Version:           1.2.9
+ * Version:           1.3.0
  * Author:            WPOPAL
  * Author URI:        https://wpopal.com
  * License:           GPL-2.0+
  * License URI:       http://www.gnu.org/licenses/gpl-2.0.txt
  * Text Domain:       gg-woo-feed
  * Domain Path:       /languages
- * Tested up to: 6.6.1
+ * Tested up to: 6.8
  * WC requires at least: 4.4
  * WC tested up to: 8.5.1
  */
@@ -26,7 +26,7 @@ if ( ! defined( 'WPINC' ) ) {
  * Define Constants
  */
 define( 'GGWOOFEED', 'gg-woo-feed' );
-define( 'GGWOOFEED_VERSION', '1.2.9' );
+define( 'GGWOOFEED_VERSION', '1.3.0' );
 define( 'GGWOOFEED_DIR', plugin_dir_path( __FILE__ ) );
 define( 'GGWOOFEED_URL', plugin_dir_url( __FILE__ ) );
 define( 'GGWOOFEED_PLUGIN_BASENAME', plugin_basename( __FILE__ ) );
@@ -38,6 +38,17 @@ require_once( GGWOOFEED_DIR . 'inc/Core/functions.php' );
 require_once( GGWOOFEED_DIR . 'inc/Core/mix-functions.php' );
 require_once( GGWOOFEED_DIR . 'inc/Core/template-functions.php' );
 require_once( GGWOOFEED_DIR . 'inc/Core/ajax-functions.php' );
+
+/**
+ * Declare compatibility with WooCommerce High-Performance Order Storage (HPOS)
+ * This informs WooCommerce that the plugin supports HPOS (custom order tables),
+ * preventing admin warnings and ensuring proper integration.
+ */
+add_action('before_woocommerce_init', function() {
+    if (class_exists(\Automattic\WooCommerce\Utilities\FeaturesUtil::class)) {
+        \Automattic\WooCommerce\Utilities\FeaturesUtil::declare_compatibility('custom_order_tables', __FILE__, true);
+    }
+});
 
 /**
  * Register Activation and Deactivation Hooks
